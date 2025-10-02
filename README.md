@@ -34,12 +34,16 @@ This wasn't that hard. I just had to give /challenge/run *p* as they mentioned t
 
 ## [Silly Shenanigans] Snooping on configurations
 In this challenge:\
-''' zardus@dojo:~$ echo "FLAG_GETTER_API_KEY=sk-XXXYYYZZZ" > ~/.bashrc '''
+``` 
+zardus@dojo:~$ echo "FLAG_GETTER_API_KEY=sk-XXXYYYZZZ" > ~/.bashrc
+```
 Afterwards, Zardus can easily refer to the API key. In this level, users can use a valid API key to get the flag:\
-''' zardus@dojo:~$ flag_getter --key $FLAG_GETTER_API_KEY 
+```
+zardus@dojo:~$ flag_getter --key $FLAG_GETTER_API_KEY 
 Correct API key! Do you want me to print the key (y/n)? y
 pwn.college{HACKED}
-zardus@dojo:~$ '''
+zardus@dojo:~$
+```
 Naturally, Zardus stores his key in .bashrc. Can you steal the key and get the flag?\
 [[Here is the challenge Link](https://pwn.college/linux-luminarium/shenanigans/)
 
