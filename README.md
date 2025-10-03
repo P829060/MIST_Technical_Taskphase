@@ -1,4 +1,4 @@
-# MIST_Technical_Taskphase
+<img width="1918" height="967" alt="image" src="https://github.com/user-attachments/assets/50ed077d-d8f8-4934-afd8-5a410f079569" /># MIST_Technical_Taskphase
 Technical Taskphase during 2nd Year
 
 # 1. Linux Luminarium Questions
@@ -46,7 +46,7 @@ pwn.college{HACKED}
 zardus@dojo:~$
 ```
 Naturally, Zardus stores his key in .bashrc. Can you steal the key and get the flag?\
-[[Here is the challenge Link](https://pwn.college/linux-luminarium/shenanigans/)
+[Here is the challenge Link](https://pwn.college/linux-luminarium/shenanigans/)
 
 ### Solving
 This was simple as well. He had already written it to his .bashrc file. You can read it. So just grep it and then use it as an argument to the flag_getter command. You are asked if you want the flag, obviously you do. Enter y and get the flag.
@@ -90,3 +90,113 @@ Given this info, we now know the private addresses range. For an IP - Restrictio
 > Ip_$po0Fing
 
 ## 3) – HTTP- Open redirect
+
+
+### Flag
+> e6f8a530811d5a479812d7b82fc1a5c5
+
+## 4) – HTTP- User-agent
+
+### Flag
+> rr$Li9%L34qd1AAe27
+
+## 5) – HTTP- Directory indexing
+
+### Flag
+> LINUX
+
+#  3. Cryptography
+# 3.2 Easy Frequency Analysis question where each letter is replaced by an emoji:
+cipher: book.txt- can you help my find the name of this book and it’s writer?
+[Click here for Link](https://drive.proton.me/urls/7HMYHJQB20#3ssNqYMRXlKp)
+
+### Solving
+Frequency analysis is the main method to break simple substitution ciphers (where each symbol → one letter).
+The trick:
+In English (and most languages), letters don’t appear equally often.
+For example:
+E is the most common letter (≈13% of text)
+then T, A, O, I, N, S, H, R
+rare letters: Q, X, Z
+So if your ciphertext uses strange symbols (like emojis), the most common symbol is probably E, the second T, and so on.
+
+Basic Methodology:
+1. Count character frequencies - Make a histogram of all cipher symbols. Rank them.
+2. Guess letter matches - Align cipher frequency order with English frequency order (E,T,A,O,I,N,S,H,R…).
+                          → e.g., if 😍 is the most frequent symbol, it probably = E.
+3. Look at short words -  1-letter words → “A” or “I”
+                          2-letter words → “of”, “to”, “in”, “it”, “is”, etc.
+                          3-letter words → “the”, “and”, “for”, “but”
+4. Spot repeating patterns - If a word repeats often and fits ??? = “the”, map it.
+                             Double symbols → double letters (ll, ss, ee).
+5. Use context clues - Capitalized words = proper nouns (names, places).
+                       First lines often give the book title or character names.
+6. Iterate - Each new mapping reveals more text. The process snowballs until the ciphertext is fully readable.
+
+In Our Case:
+1. Look at symbol frequency
+I counted how often each emoji appears in the file.
+The most common emoji (😍) occurred 141,404 times → that had to be E, the most common letter in English.
+The sequence 🤡😢😍 appeared 14,730 times → that looked like “the”, the most common word.
+A single emoji (😙) appeared as its own word over 6,000 times → almost certainly “a”.
+So right away, the ciphertext was behaving like normal English text.
+#### Key emoji → letter mappings used (most important ones):
+😍 → e
+
+🤡 → t
+
+😙 → a
+
+🥶 → o
+
+👂 → i
+
+🥴 → n
+
+🥺 → s
+
+😢 → h
+
+🙀 → l
+
+🤐 → y
+
+😵 → p
+
+👧 → u
+
+😡 → m
+
+Align emoji words to plaintext words
+For example:
+🥺🤡😙🤡😍🙀🤐 → “Stately”
+😵🙀👧😡😵 → “plump”
+🤪👧😎😂 → “Buck”
+😡👧🙀🙀👂🤩😙🥴 → “Mulligan”
+🤡😢😍 → “the”
+By aligning character-by-character, I built a substitution table (emoji → letters).
+
+By Applying to next 300 characters,we get:
+stately, plump buck mulligan came from the stairhead, bearing a bowl of lather on which a mirror and a razor lay crossed...
+That’s the exact opening of *Ulysses*.
+
+Therefore the author and book is: *Ulysses by James Joyce*.
+
+### Flag(Answer)
+> Ulysses by James Joyce
+
+# 3.3 Spiral cipher
+cipher:taskphaWL_PL4sOingpYefdngaP{_diddL40ap}y5rn_s1m37
+
+### Solving
+
+### Flag
+> taskphase{4r73m1s_n0_fOWL_PL4YPL5y}paddingpadding
+
+# 3.4 Averages 3 letters to make cipher
+cipher: GGGIIIFFFIIIGGGDDDGGGAAABBB
+
+### Solving
+
+### Flag
+> 
