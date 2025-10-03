@@ -1,4 +1,4 @@
-<img width="1918" height="967" alt="image" src="https://github.com/user-attachments/assets/50ed077d-d8f8-4934-afd8-5a410f079569" /># MIST_Technical_Taskphase
+# MIST_Technical_Taskphase
 Technical Taskphase during 2nd Year
 
 # 1. Linux Luminarium Questions
@@ -101,7 +101,7 @@ Given this info, we now know the private addresses range. For an IP - Restrictio
 > rr$Li9%L34qd1AAe27
 
 ## 5) – HTTP- Directory indexing
-
+<img width="1918" height="967" alt="image" src="https://github.com/user-attachments/assets/50ed077d-d8f8-4934-afd8-5a410f079569" />
 ### Flag
 > LINUX
 
