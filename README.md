@@ -1,8 +1,9 @@
 # MIST_Technical_Taskphase
 Technical Taskphase during 2nd Year
 
-# Linux Luminarium Questions
-## [piping] Split-piping stderr and stdout
+# 1. Linux Luminarium Questions
+
+## 1) [piping] Split-piping stderr and stdout
 The challenge description is as follows:\ 
 The challenge here, of course, is that the | operator links the stdout of the left command with the stdin of the right command. Of course, you've used 2>&1 to redirect stderr into stdout and, thus, pipe stderr over, but this then mixes stderr and stdout. How to keep it unmixed?
 
@@ -22,7 +23,7 @@ It took me a decent amount of time to arrive at the answer. I first thought that
 ### Flag
 > pwn.college{M8x2Bv_KBUffG_zXX9-seTdihUS.dFDNwYDLwcTO3gzW}
 
-## [globbing] Multiple Globs
+## 2) [globbing] Multiple Globs
 We put a few happy, but diversely-named files in /challenge/files. Go cd there and run /challenge/run, providing a single argument: a short (3 characters or less) globbed word with two * globs in it that covers every word that contains the letter p. [Here is the challenge Link](https://pwn.college/linux-luminarium/globbing/)
 
 ### Solving
@@ -32,7 +33,7 @@ This wasn't that hard. I just had to give /challenge/run *p* as they mentioned t
 ### Flag
 > pwn.college{89Qd5qGNMMSASk3Sm66c7RUH51_.QXycTO2EDLwcTO3gzW}
 
-## [Silly Shenanigans] Snooping on configurations
+## 3) [Silly Shenanigans] Snooping on configurations
 In this challenge:\
 ``` 
 zardus@dojo:~$ echo "FLAG_GETTER_API_KEY=sk-XXXYYYZZZ" > ~/.bashrc
@@ -53,3 +54,39 @@ This was simple as well. He had already written it to his .bashrc file. You can 
 
 ### Flag
 > pwn.college{QUQV5YELZlherIXokJz-i9zPAuk.QXyQTM3EDLwcTO3gzW}
+
+# 2. Webex questions
+
+## 1) – HTML- Source code
+Don’t search too far
+
+### Solving
+The challenge mentioned to not look far. So i started by inspecting the html code. There i found a comment which mentioned the password. The site mentioned that the password was the flag. So yeah the flag is the password itself
+
+### Flag
+> nZ^&@q5&sjJHev0
+
+## 2) – HTTP- IP restriction bypass
+Dear colleagues,
+
+We’re now managing connections to the intranet using private IP addresses, so it’s no longer necessary to login with a username / password when you are already connected to the internal company network.
+
+Regards,
+
+The network admin
+
+### Solving 
+This required me to know about private networks.
+IPv4 Private Address Ranges:
+The Internet Assigned Numbers Authority (IANA) has reserved specific ranges of IPv4 addresses for private use. These ranges are as follows:
+Class A: 10.0.0.0 to 10.255.255.255
+Class B: 172.16.0.0 to 172.31.255.255
+Class C: 192.168.0.0 to 192.168.255.255
+These addresses can be reused in different private networks around the world without causing conflicts, as they are not routable on the internet.
+
+Given this info, we now know the private addresses range. For an IP - Restriction Bypass, we must add an extra header in the client-request, called : "X-forwarded-for: [The IP Address]". With the above information, we now use any of the 3 and check if it works. We also require Burp Suite here, to intercept the requests, so that we can add the extra header. In my case, i will use 10.0.0.1 as the private network address.
+
+### Flag
+> Ip_$po0Fing
+
+## 3) – HTTP- Open redirect
