@@ -158,7 +158,7 @@ What it does and its features, along with its limitations:
 Using key [[3,3],[2,5]] it encrypted "HELLO" → "HIOZHN" and successfully decrypted back.
 <br><br>
 Given Below is the python script: <br><br>
-```python
+```
 from math import gcd
 from itertools import product
 
