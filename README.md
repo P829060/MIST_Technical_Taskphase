@@ -4,16 +4,16 @@ Technical Taskphase during 2nd Year
 # 1. Linux Luminarium Questions
 
 ## 1) [piping] Split-piping stderr and stdout
-The challenge description is as follows:\ 
+The challenge description is as follows:<br>
 The challenge here, of course, is that the | operator links the stdout of the left command with the stdin of the right command. Of course, you've used 2>&1 to redirect stderr into stdout and, thus, pipe stderr over, but this then mixes stderr and stdout. How to keep it unmixed?
 
-You will need to combine your knowledge of >(), 2>, and |. How to do it is a task I'll leave to you.\
+You will need to combine your knowledge of >(), 2>, and |. How to do it is a task I'll leave to you.<br>
 
-In this challenge, you have:\
+In this challenge, you have:<br>
 
-/challenge/hack: this produces data on stdout and stderr\
-/challenge/the: you must redirect hack's stderr to this program\
-/challenge/planet: you must redirect hack's stdout to this program\
+/challenge/hack: this produces data on stdout and stderr<br>
+/challenge/the: you must redirect hack's stderr to this program<br>
+/challenge/planet: you must redirect hack's stdout to this program<br>
 [Here is the challenge link](https://pwn.college/linux-luminarium/piping/)
 
 ### Solving
@@ -58,10 +58,11 @@ This was simple as well. He had already written it to his .bashrc file. You can 
 # 2. Webex questions
 
 ## 1) – HTML- Source code
-Don’t search too far
+Don’t search too far.[Here is the challenge Link](https://www.root-me.org/en/Challenges/Web-Server/HTML-Source-code?lang=en)
 
 ### Solving
-The challenge mentioned to not look far. So i started by inspecting the html code. There i found a comment which mentioned the password. The site mentioned that the password was the flag. So yeah the flag is the password itself
+The challenge mentioned to not look far. So i started by inspecting the html code. There i found a comment which mentioned the password. The site mentioned that the password was the flag. So yeah the flag is the password itself. <br><br>
+![Image Of Source Code](https://github.com/P829060/LinuxLuminariumAndBanditImages/blob/94a438ee34d47bc4c805601ece7f6424ae21846d/Source%20Code.png)
 
 ### Flag
 > nZ^&@q5&sjJHev0
@@ -73,35 +74,68 @@ We’re now managing connections to the intranet using private IP addresses, so 
 
 Regards,
 
-The network admin
+The network admin<br>
+[Here is the challenge Link](https://www.root-me.org/en/Challenges/Web-Server/HTTP-IP-restriction-bypass)
 
 ### Solving 
-This required me to know about private networks.
-IPv4 Private Address Ranges:
+This required me to know about private networks.<br>
+IPv4 Private Address Ranges:<br>
 The Internet Assigned Numbers Authority (IANA) has reserved specific ranges of IPv4 addresses for private use. These ranges are as follows:
-Class A: 10.0.0.0 to 10.255.255.255
-Class B: 172.16.0.0 to 172.31.255.255
-Class C: 192.168.0.0 to 192.168.255.255
+1. Class A: 10.0.0.0 to 10.255.255.255
+2. Class B: 172.16.0.0 to 172.31.255.255
+3. Class C: 192.168.0.0 to 192.168.255.255
 These addresses can be reused in different private networks around the world without causing conflicts, as they are not routable on the internet.
-
-Given this info, we now know the private addresses range. For an IP - Restriction Bypass, we must add an extra header in the client-request, called : "X-forwarded-for: [The IP Address]". With the above information, we now use any of the 3 and check if it works. We also require Burp Suite here, to intercept the requests, so that we can add the extra header. In my case, i will use 10.0.0.1 as the private network address.
+<br><br>
+Given this info, we now know the private addresses range. For an IP - Restriction Bypass, we must add an extra header in the client-request, called : "X-forwarded-for: [The IP Address]". With the above information, we now use any of the 3 and check if it works. We also require Burp Suite here, to intercept the requests, so that we can add the extra header. In my case, i will use 10.0.0.1 as the private network address. <br><br>
+![Image of Intercepting Response through Burp Suite Proxy](https://github.com/P829060/LinuxLuminariumAndBanditImages/blob/4c16dc89241d789cdfa8a0b4c0de823873a71a7c/IP%20Proxy%20Bypass-1.png)
+<br><br>
+![Image of adding X-forwarded-for header and receiving its response](https://github.com/P829060/LinuxLuminariumAndBanditImages/blob/4c16dc89241d789cdfa8a0b4c0de823873a71a7c/IP%20Proxy%20Bypass-2.png)
+<br><br>
 
 ### Flag
 > Ip_$po0Fing
 
 ## 3) – HTTP- Open redirect
+Find a way to make a redirection to a domain other than those showed on the web page.<br>
+[Here is the challenge Link]([https://www.root-me.org/en/Challenges/Web-Server/HTTP-IP-restriction-bypass](https://www.root-me.org/en/Challenges/Web-Server/HTTP-Open-redirect))<br><br>
+[Another link :)](https://www.youtube.com/watch?v=xvFZjo5PgG0)<br><br>
 
+### Solving
+A really good explanation of Open Direct, I found on the internet was:<br>
+What is an open redirect?<br>
+An open redirect vulnerability occurs when an application allows a user to control a redirect or forward to another URL. If the app does not validate untrusted user input, an attacker could supply a URL that redirects an unsuspecting victim from a legitimate domain to an attacker’s phishing site.
+The challenge is simple. We have to redirect any of the links to a different website, than the ones mentioned. If you check the headers, it shows that it checks for the hash as well as the domain. You can try only changing the domain and see if the server validates the hash. If it does, you must also change the hash to the domain name you have. Use a hash decoder, to detect the type of hash. In my case, it was an MD5 hash, which allows me to easily encode the hash for my domain and put it in the headers. Send the request and you should be able to see the password in the response. You can intercept the request using Proxy in Burp Suite, then send it to the Repeater. After that,do the required changes, send the request and you will get the response.<br><br>
+![Image of Proxy Intercept through Burp Suite](https://github.com/P829060/LinuxLuminariumAndBanditImages/blob/4c16dc89241d789cdfa8a0b4c0de823873a71a7c/open%20redirect-1.png)
+<br><br>
+![Image after receiving the response by addng domain name and fixing the hash](https://github.com/P829060/LinuxLuminariumAndBanditImages/blob/4c16dc89241d789cdfa8a0b4c0de823873a71a7c/open%20redirect-2.png)
+<br><br>
 
 ### Flag
 > e6f8a530811d5a479812d7b82fc1a5c5
 
 ## 4) – HTTP- User-agent
+Admin is really dumb...<br>
+[Here is the challenge Link](https://www.root-me.org/en/Challenges/Web-Server/HTTP-User-agent)
+
+### Solving
+You just change User-agent to admin here in the header of it. After it, just send the request, the response shows the passoword. Pretty straight forward.
+![Before Sending the Request](https://github.com/P829060/LinuxLuminariumAndBanditImages/blob/94a438ee34d47bc4c805601ece7f6424ae21846d/user%20agent-1.png) <br><br>
+![After editing User-Agent and then sending the Request, receiving it's response as well](https://github.com/P829060/LinuxLuminariumAndBanditImages/blob/94a438ee34d47bc4c805601ece7f6424ae21846d/user%20agent-2.png)
+<br><br>
 
 ### Flag
 > rr$Li9%L34qd1AAe27
 
 ## 5) – HTTP- Directory indexing
-<img width="1918" height="967" alt="image" src="https://github.com/user-attachments/assets/50ed077d-d8f8-4934-afd8-5a410f079569" />
+CTRL+U...<br>
+[Here is the challenge Link](https://www.root-me.org/en/Challenges/Web-Server/HTTP-Directory-indexing)
+
+### Solving
+The Source code tells you that there is a page of the website you must visit. There is no route for it on the page, it's just blank. So you must manually edit the link with whatever they have said. Starting /admin being added to the end of the link. Then try pass.html. Well, you see pass.html isn't the page you get your password. But admin has a backup directory. Checking that gives a file which contains the password explicitly.
+![Showing source code](https://github.com/P829060/LinuxLuminariumAndBanditImages/blob/94a438ee34d47bc4c805601ece7f6424ae21846d/directory%20indexing%20-1.png) <br><br>
+![Showing admin page](https://github.com/P829060/LinuxLuminariumAndBanditImages/blob/94a438ee34d47bc4c805601ece7f6424ae21846d/directory%20indexing-2.png) <br><br>
+![The password file in backup directory](https://github.com/P829060/LinuxLuminariumAndBanditImages/blob/94a438ee34d47bc4c805601ece7f6424ae21846d/directory%20indexing-3.png) <br><br>
+
 ### Flag
 > LINUX
 
