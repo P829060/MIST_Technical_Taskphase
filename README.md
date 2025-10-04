@@ -157,9 +157,8 @@ What it does and its features, along with its limitations:
 <br>
 Using key [[3,3],[2,5]] it encrypted "HELLO" → "HIOZHN" and successfully decrypted back.
 <br><br>
-Given Below is the python script: <br><br>
+Given Below is the python script:
 ```
-
 from math import gcd
 from itertools import product
 
@@ -284,8 +283,8 @@ if __name__ == "__main__":
         print("Too many results to display; first 20:")
         for k in found[:20]:
             print(key_to_matrix_str(k))
-
 ```
+
 
 
 # 3.2 Easy Frequency Analysis question where each letter is replaced by an emoji:
