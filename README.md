@@ -103,7 +103,7 @@ Find a way to make a redirection to a domain other than those showed on the web 
 ### Solving
 A really good explanation of Open Direct, I found on the internet was:<br>
 What is an open redirect?<br>
-An open redirect vulnerability occurs when an application allows a user to control a redirect or forward to another URL. If the app does not validate untrusted user input, an attacker could supply a URL that redirects an unsuspecting victim from a legitimate domain to an attacker’s phishing site.
+An open redirect vulnerability occurs when an application allows a user to control a redirect or forward to another URL. If the app does not validate untrusted user input, an attacker could supply a URL that redirects an unsuspecting victim from a legitimate domain to an attacker’s phishing site.<br>
 The challenge is simple. We have to redirect any of the links to a different website, than the ones mentioned. If you check the headers, it shows that it checks for the hash as well as the domain. You can try only changing the domain and see if the server validates the hash. If it does, you must also change the hash to the domain name you have. Use a hash decoder, to detect the type of hash. In my case, it was an MD5 hash, which allows me to easily encode the hash for my domain and put it in the headers. Send the request and you should be able to see the password in the response. You can intercept the request using Proxy in Burp Suite, then send it to the Repeater. After that,do the required changes, send the request and you will get the response.<br><br>
 ![Image of Proxy Intercept through Burp Suite](https://github.com/P829060/LinuxLuminariumAndBanditImages/blob/4c16dc89241d789cdfa8a0b4c0de823873a71a7c/open%20redirect-1.png)
 <br><br>
@@ -118,7 +118,8 @@ Admin is really dumb...<br>
 [Here is the challenge Link](https://www.root-me.org/en/Challenges/Web-Server/HTTP-User-agent)
 
 ### Solving
-You just change User-agent to admin here in the header of it. After it, just send the request, the response shows the passoword. Pretty straight forward.
+A user-agent is the software, like a web browser, that a user employs to access the internet and receive content. When you request a webpage, your user-agent sends a "user-agent string" (a message) to the server, identifying the browser type, operating system, and other details. The server uses this information to deliver content formatted specifically for your device and software.<br><br>
+You just change User-agent to admin here in the header of it (because he is dumb apparently). After it, just send the request, the response shows the passoword. Pretty straight forward.
 ![Before Sending the Request](https://github.com/P829060/LinuxLuminariumAndBanditImages/blob/94a438ee34d47bc4c805601ece7f6424ae21846d/user%20agent-1.png) <br><br>
 ![After editing User-Agent and then sending the Request, receiving it's response as well](https://github.com/P829060/LinuxLuminariumAndBanditImages/blob/94a438ee34d47bc4c805601ece7f6424ae21846d/user%20agent-2.png)
 <br><br>
@@ -140,6 +141,151 @@ The Source code tells you that there is a page of the website you must visit. Th
 > LINUX
 
 #  3. Cryptography
+I had to use tools here. Sometimes even chatgpt (only for the code and frequency analysis,as its a huge file). The last one, i didn't understand much :( , however i have tried it.<br>
+# 3.1  3.1 Development
+Make a small python script for Hill Cipher, Encryption and Decryption and an option to brute force it with known block size-(2x).
+
+### Python Script And its features:
+What it does and its features, along with its limitations: 
+1. encrypts and decrypts using a 2×2 Hill cipher key (mod 26)
+2. computes matrix inverse mod 26
+3. enumerates all invertible 2×2 keys
+4. brute-forces keys when you have a known plaintext/ciphertext pair (block size = 2).
+5. The script filters input to alphabetic characters only and pads with 'X' to make length divisible by 2.
+6. You can adapt the script to preserve non-letter characters or use lowercase mapping as needed.
+7. For larger block sizes (3×3 or more) the brute-force space grows as 26^(n^2) and becomes quickly infeasible.
+<br>
+Using key [[3,3],[2,5]] it encrypted "HELLO" → "HIOZHN" and successfully decrypted back.
+<br><br>
+Given Below is the python script: <br><br>
+```python
+from math import gcd
+from itertools import product
+
+ALPHABET = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+M = 26
+
+def egcd(a, b):
+    if b == 0:
+        return (a, 1, 0)
+    g, x1, y1 = egcd(b, a % b)
+    return (g, y1, x1 - (a // b) * y1)
+
+def modinv(a, m):
+    g, x, _ = egcd(a % m, m)
+    if g != 1:
+        return None
+    return x % m
+
+def matrix_det_2x2(mat):
+    return (mat[0]*mat[3] - mat[1]*mat[2]) % M
+
+def matrix_inv_2x2(mat):
+    det = matrix_det_2x2(mat)
+    inv_det = modinv(det, M)
+    if inv_det is None:
+        return None
+    a, b, c, d = mat
+    inv = [( d * inv_det) % M,
+           ((-b) * inv_det) % M,
+           ((-c) * inv_det) % M,
+            ( a * inv_det) % M]
+    return inv
+
+def text_to_numbers(text):
+    return [ALPHABET.index(ch) for ch in text.upper() if ch.isalpha()]
+
+def numbers_to_text(nums):
+    return "".join(ALPHABET[n % M] for n in nums)
+
+def pad_text(text, block_size=2, pad_char='X'):
+    filtered = "".join(ch for ch in text.upper() if ch.isalpha())
+    if len(filtered) % block_size != 0:
+        filtered += pad_char * (block_size - (len(filtered) % block_size))
+    return filtered
+
+def encrypt_block(block_nums, key):
+    a,b,c,d = key
+    x, y = block_nums
+    return [(a*x + b*y) % M, (c*x + d*y) % M]
+
+def decrypt_block(block_nums, key_inv):
+    return encrypt_block(block_nums, key_inv)
+
+def encrypt(plaintext, key):
+    block_size = 2
+    pt = pad_text(plaintext, block_size)
+    nums = text_to_numbers(pt)
+    cipher_nums = []
+    for i in range(0, len(nums), block_size):
+        block = nums[i:i+block_size]
+        cipher_nums.extend(encrypt_block(block, key))
+    return numbers_to_text(cipher_nums)
+
+def decrypt(ciphertext, key):
+    nums = text_to_numbers(ciphertext)
+    inv = matrix_inv_2x2(key)
+    if inv is None:
+        raise ValueError("Key is not invertible mod 26; can't decrypt.")
+    plain_nums = []
+    for i in range(0, len(nums), 2):
+        block = nums[i:i+2]
+        plain_nums.extend(decrypt_block(block, inv))
+    return numbers_to_text(plain_nums).rstrip('X')
+
+def all_invertible_2x2_keys():
+    for a, b, c, d in product(range(M), repeat=4):
+        det = (a*d - b*c) % M
+        if gcd(det, M) == 1:
+            yield [a,b,c,d]
+
+def brute_force_known_plaintext(ciphertext, known_plaintext):
+    ct = pad_text(ciphertext, 2)
+    pt = pad_text(known_plaintext, 2)
+    if len(ct) != len(pt):
+        raise ValueError("Known plaintext and ciphertext lengths must match after filtering/padding.")
+    candidates = []
+    ct_nums = text_to_numbers(ct)
+    pt_nums = text_to_numbers(pt)
+    for key in all_invertible_2x2_keys():
+        produced = []
+        for i in range(0, len(pt_nums), 2):
+            produced.extend(encrypt_block(pt_nums[i:i+2], key))
+        if produced == ct_nums:
+            candidates.append(key)
+    return candidates
+
+def key_to_matrix_str(key):
+    a,b,c,d = key
+    return f"[[{a:2d}, {b:2d}],\n [{c:2d}, {d:2d}]]"
+
+# Simple usage demo if run as a script
+if __name__ == "__main__":
+    key = [3,3,2,5]  # example key
+    plaintext = "HELLO"
+    ciphertext = encrypt(plaintext, key)
+    decrypted = decrypt(ciphertext, key)
+    print("Example key:\n", key_to_matrix_str(key))
+    print("Plaintext:", plaintext)
+    print("Ciphertext:", ciphertext)
+    print("Decrypted :", decrypted)
+
+    # Demo brute-force with known plaintext/ciphertext (length 4 example)
+    demo_pt = "TEST"
+    demo_ct = encrypt(demo_pt, key)
+    print("\nBrute-forcing key from known plaintext/ciphertext (demo)...")
+    found = brute_force_known_plaintext(demo_ct, demo_pt)
+    print(f"Number of candidate keys found: {len(found)}")
+    if len(found) <= 20:
+        for k in found:
+            print(key_to_matrix_str(k))
+    else:
+        print("Too many results to display; first 20:")
+        for k in found[:20]:
+            print(key_to_matrix_str(k))
+```
+
+
 # 3.2 Easy Frequency Analysis question where each letter is replaced by an emoji:
 cipher: book.txt- can you help my find the name of this book and it’s writer?
 [Click here for Link](https://drive.proton.me/urls/7HMYHJQB20#3ssNqYMRXlKp)
@@ -223,14 +369,23 @@ Therefore the author and book is: *Ulysses by James Joyce*.
 cipher:taskphaWL_PL4sOingpYefdngaP{_diddL40ap}y5rn_s1m37
 
 ### Solving
+Used the spiral cipher decode tool from dcode. [Click for the tool](https://www.dcode.fr/spiral-cipher) <br>
+One thing that is clearly evident, is that the flag is in form of taskphase{...}. So i was sure it should be somewhat in that form. Used the spiral cipher decode tool from dcode that brute forced it in different types of spiral ciphers.  Got the 2nd option that best matches what I was looking for. I think the type of spiral cipher here is: Inward from top-left, clockwise , because thats what it showed for the second option. So yeah that's the flag :) . 
+![Image of spiral cipher decode tool with 2nd ](https://github.com/P829060/LinuxLuminariumAndBanditImages/blob/38f9808d22d4ae9b0a42e95b0b8c9f539a812959/spiral%20cipher.png)
 
 ### Flag
 > taskphase{4r73m1s_n0_fOWL_PL4YPL5y}paddingpadding
 
 # 3.4 Averages 3 letters to make cipher
 cipher: GGGIIIFFFIIIGGGDDDGGGAAABBB
+Didn't understand this question (my skill issue). I did try something through Chatgpt. <br>
 
 ### Solving
+Collapse every triple:
+GGG III FFF III GGG DDD GGG AAA BBB → GIFIGDGAB.<br>
+Pattern of collapsed letters = A B C B A D A E F → positions 1,5,7 are same; 2 and 4 are same. That strongly suggests a phrase where word1 and the first letter of word3 repeat at those positions.<br>
+From pattern-matching with common 3-letter words, the first three letters consistently map to ONE (i.e. G→O, I→N, F→E). That anchor is very strong.<br>
+Of the plausible 3-word combinations that fit the pattern and are grammatical/readable, “ONE NOW OUT” is the clearest English phrase (“one now out” — e.g. “one [player/thing] is now out”), so I pick it as the answer.<br><br>
 
 ### Flag
-> 
+> ONENOWOUT
