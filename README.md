@@ -159,6 +159,7 @@ Using key [[3,3],[2,5]] it encrypted "HELLO" → "HIOZHN" and successfully decry
 <br><br>
 Given Below is the python script: <br><br>
 ```
+
 from math import gcd
 from itertools import product
 
@@ -283,6 +284,7 @@ if __name__ == "__main__":
         print("Too many results to display; first 20:")
         for k in found[:20]:
             print(key_to_matrix_str(k))
+
 ```
 
 
