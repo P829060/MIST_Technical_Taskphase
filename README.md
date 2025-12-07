@@ -1,6 +1,19 @@
 # MIST_Technical_Taskphase
 Technical Taskphase during 2nd Year
+# 07/12/2025
+## 1)Write an assembly program (x86) that adds 2 arbitary numbers, and prints to the console.
+Here I have done Assembly code that runs inside the C runtime environment (depends on C library functions like printf). I felt using C runtime reduces the size of the program and makes implementation much easier. The syscall method requires a lot of code lines, so I have gone with the C runtime approach here. I am trying to add 123 and 456 to give 579 as the result. I have also created a string which contains the format for the way I want to print it on the console. I have provided the link for the code file below.<br> [Here is the Code file link](https://github.com/P829060/MIST_Technical_Taskphase/blob/f363953be2b85f2890c07386fb8a7ea603a5587b/Add2ArbitraryNumbers.asm)
+<br> You can also see the output below:<br>
+![Image of output by mentioned program](https://github.com/P829060/LinuxLuminariumAndBanditImages/blob/628976b43758efab3aa44b94dc373b951a20ccd7/Screenshot%20of%20Adding%202%20binary%20Numbers%20in%20x86%20NASM.png)
+<br>
 
+## 2)Write an assembly program that takes a string as input from STDIN, and capitalizes all characters.
+I have done a pure syscall-based assembly program in this case. This program takes an input from user and capitalizes all characters in the given input string. I have provided the link for the code file below.<br> [Here is the Code file link](https://github.com/P829060/MIST_Technical_Taskphase/blob/f363953be2b85f2890c07386fb8a7ea603a5587b/CapitalizeCharReadFromInput.asm)
+<br> You can also see the output below:<br>
+![Image of output by mentioned program](https://github.com/P829060/LinuxLuminariumAndBanditImages/blob/628976b43758efab3aa44b94dc373b951a20ccd7/Screenshot%20Of%20Taking%20input%20from%20STDIN%20and%20capitalizing%20it%20x86%20NASM.png)
+<br><br>
+
+# 04/10/2025
 # 1. Linux Luminarium Questions
 
 ## 1) [piping] Split-piping stderr and stdout
